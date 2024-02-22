@@ -22,10 +22,7 @@ used to transfer mail from a mail exchanger to another,
 was standardized in the late 70s.
 It started gaining traction during the 80s as more and more machines became permanently connected,
 progressively deprecating UUCP as the protocol of choice for exchanging e-mail.
-In the 90s,
-with internet service providers and mail hosting companies handing addresses to everyone with an internet access,
-the SMTP protocol became so widespread that it became the media of choice to exchange messages worldwide.
-Not everyone shared the same instant messenger but everyone with an internet access had an e-mail address that could be reached by anyone else.
+In the 1990s, internet service providers and mail hosting companies began providing email addresses to anyone with internet access. This widespread adoption of the SMTP protocol made it the preferred method for exchanging messages globally, regardless of instant messenger compatibility.
 
 Estimates claim that today +350 billions emails are exchanged around the world daily between +3.1 billions mailboxes owned by +2 billion people<sup>[1](#1)</sup>.
 That's roughly one person out of three for the entire population of our planet (Earth at the time of this writing).
@@ -81,12 +78,7 @@ using the SMTP protocol,
 in order to route mails to their destination.
 
 The software is distributed for free under the ISC license.
-It imposes no restrictions for both private and commercial uses.
-The license grants permission to use,
-copy,
-modify and distribute the software for any purpose,
-with or without fee,
-as long as the copyright and the permission notices appear in all copies.
+The ISC license allows for unrestricted use, modification, and distribution of the software, with the reminder to uphold copyright and permission notices.
 The code is offered to the community,
 you are allowed to sell it and/or make a derivative work without giving back anything,
 all you have to remember is that karma is a bitch.
@@ -142,7 +134,7 @@ To be honest, it's almost boring.
 
 ## Is OpenSMTPD good for me ?
 The only way to know is for you to actually try and figure by yourself if it has the features you need.
-The focus on keeping it simple and its relatively young age makes it less featureful than alternatives,
+Due to its focus on simplicity and relatively recent development, OpenSMTPD may have fewer features compared to alternative,
 however it does cover a very wide range of common use-cases and a majority of people will find it fulfills their needs.
 
 In addition,
