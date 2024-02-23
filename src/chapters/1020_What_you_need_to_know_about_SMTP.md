@@ -8,18 +8,10 @@
 
 
 ## What is SMTP ?
-SMTP is the Simple Mail Transfer Protocol.
-It is a protocol standardized in RFC5321 and used by mail systems to communicate one with another.
-The SMTP protocol does not handle the entire mail chain but has a very specific objective:
-transfer mail reliably from point A to point B.
-It is the electronic analogy of a mailman,
-more reliable though...
+SMTP is the Simple Mail Transfer Protocol. It's a protocol standardized in RFC5321 and used by mail systems to communicate with each other. The SMTP protocol doesn't manage the entire email process but has a very specific goal: reliably transferring mail from point A to point B. It's like the electronic version of a mailman, more reliable though...
 
 ## The SMTP protocol
-SMTP is a plaintext protocol that relies on a line-based human-readable dialogue between a client and a server.
-A human,
-and that's including me,
-can issue a connection to an SMTP server and play out an SMTP session manually:
+SMTP operates as a plaintext protocol, facilitating a line-based, human-readable dialogue between a client and a server. Even a human, including myself, can manually engage in an SMTP session by connecting to an SMTP server:
 
 ```
 $ nc localhost 25 
@@ -41,7 +33,7 @@ C: QUIT
 S: 221 2.0.0: Bye
 ```
 
-Note that this doesn't mean that a transfer is necessarily readable in the wire.
+It's important to note that it doesn't mean a transfer is necessarily readable in the wire.
 The plaintext dialogue may very well take place within an encrypted transport layer, such as TLS, making it look gibberish on the outside.
 However,
 no matter how it looks on the outside,
@@ -49,20 +41,16 @@ it is beautiful on the inside.
 
 
 ### The SMTP session
-The SMTP session begins when an SMTP client connects to an SMTP server and ends when the client disconnects or is disconnected.
-A session can be described as "everything that happened during a single connection".
+The SMTP session begins when an SMTP client establishes a connection with an SMTP server and concludes upon the client's disconnection or being disconnected. A session encapsulates "everything that transpires during a single connection."
 
-An SMTP session always starts with an introduction phase between the server and the client:
-
+Each SMTP session initiates with an introductory phase between the server and the client:
 ```
 S: 220 poolp.org ESMTP OpenSMTPD
 C: HELO localhost
 S: 250 poolp.org Hello localhost [127.0.0.1], pleased to meet you
 ```
 
-Depending on how the client introduced itself,
-with the verb HELO or the verb EHLO, an extended HELO,
-the server may advertise informations regarding its features, extensions it supports and its limitations.
+Depending on the client's method of introduction, utilizing either the HELO or EHLO verb for an extended HELO, the server may disseminate information regarding its capabilities, supported extensions, and limitations.
 
 ```
 S: 220 poolp.org ESMTP OpenSMTPD
@@ -79,8 +67,7 @@ S: 250-DSN
 S: 250 HELP
 ```
 
-At this point,
-the client may begin a transaction to transfer a message:
+Subsequently, the client may begin a transaction to dispatch a message:
 
 ```
 C: MAIL FROM:<gilles>
@@ -96,30 +83,31 @@ C: .
 S: 250 2.0.0: 832a2432 Message accepted for delivery
 ```
 
-The session ends either due to a disconnect from either side or with an explicit request to QUIT by the client:
+The session concludes either due to disconnection from either side or upon the client's explicit request to QUIT:
+
 ```
 C: QUIT
 S: 221 2.0.0: Bye
 ```
 
-Congratulations,
-you now know how to speak SMTP and play sessions by hand.
-Read the next subsection to become a guru who understands the true essence of SMTP: transactions.
+Congratulations!
+
+You're now adept at conversing in SMTP and conducting sessions manually. Proceed to the next subsection to delve deeper into the essence of SMTP: transactions.
 
 
 ### The SMTP transaction
 During an SMTP session, a client can send multiple messages.
 Each message is handled within its own transaction,
-containing a single sender, a single message and one or many recipients.
+which includes a single sender, a single message and one or many recipients.
 
-The transaction begins when client submits a new sender with the MAIL FROM command:
+The transaction begins when the client submits a new sender with the MAIL FROM command:
 
 ```
 C: MAIL FROM:<gilles>
 S: 250 2.0.0: Ok
 ```
 
-Client then submits one or many recipients with the RCPT TO command:
+The client then submits one or many recipients with the RCPT TO command:
 
 ```
 C: RCPT TO:<gilles>
@@ -138,11 +126,10 @@ C: .
 S: 250 2.0.0: 832a2432 Message accepted for delivery
 ```
 
-The single dot on a line by itself is a request to commit the transaction.
+The single dot on a line indicates the transaction's conclusion: it is a transaction commit request.
 The client basically asks for the server to acknowledge that it will become responsible for that message being delivered to all recipients.
-As soon as the server answers positively,
-the client assumes that the message will not silently vanish.
-The server will attempt to deliver the message to all recipients that were accepted in the transaction AND notify the sender if any error occurs.
+
+The server's positive response, indicated by the '250 2.0.0' code, signifies that the message has been accepted for delivery. This acknowledgment assures the client that the server will make every effort to deliver the message to all intended recipients. Additionally, the server commits to notifying the sender of any errors encountered during the delivery process. Therefore, upon receiving this response, the client can proceed with confidence, knowing that the message is in the hands of the server and will be delivered as intended: the message will not silently vanish.
 
 
 ### The SMTP network
