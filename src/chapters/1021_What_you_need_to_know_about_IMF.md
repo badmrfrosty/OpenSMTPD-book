@@ -5,10 +5,7 @@
 
 
 ## The Internet Message Format
-The Internet Message Format,
-IMF for short,
-is the format used for exchanging messages between mail exchangers.
-It is standardized in RFC 5322 and describes what and how things should be written in the ``DATA'' phase of an SMTP transaction:
+The Internet Message Format (IMF), standardized in RFC 5322, facilitates the exchange of messages between mail exchangers during the "DATA" phase of an SMTP transaction:
 
 ```
 C: DATA
@@ -20,17 +17,11 @@ C: .
 S: 250 2.0.0: 832a2432 Message accepted for delivery
 ```
 
-It is very important to understand that while the IMF is used by mail exchangers,
-the real consumers are the MUA software which depend on the structure to properly display the message for the end-user.
-As far as a mail exchanger is concerned,
-an IMF could be badly crafted for the most part without having any impact whatsoever on the transfer of messages.
-The use of the IMF is a convention for interoperability.
+It's essential to recognize that while mail exchangers utilize the IMF, the primary consumers are MUA software, which rely on its structure to appropriately display messages for end-users. From the perspective of a mail exchanger, an IMF could be poorly crafted without impacting the message transfer. The use of IMF serves as a convention for interoperability.
 
 
 ### The basic structure
-In its most basic structure the IMF consists of two parts,
-the headers part and the body part,
-separated by an empty line:
+In its simplest form, the IMF comprises two main sections: the headers part and the body part. These sections are separated by an empty line:
 
 ```
 some_header: foo
@@ -43,14 +34,9 @@ it is the first empty line that separates headers from body.
 ```
 
 ### The headers part
-The headers are metadata that help make sense out of a message.
-They contain fields which help the MUA display the message in the most readable way,
-fields which help the sender provide details like a subject, name or date,
-and fields which are added by mail exchangers to help postmasters troubleshoot transfer.
+Headers serve as metadata that aids in interpreting a message. They encompass fields essential for displaying messages in an easily readable manner for the MUA (Mail User Agent), providing senders with details such as subject, name, or date, and assisting mail exchangers in troubleshooting transfers.
 
-Each header consists of a header name and a header value,
-separated by a colon and a space ``: '',
-and may span on multiple lines as long as continuation lines are escaped by prepending with whitespaces:
+Each header comprises a header name and a header value, delineated by a colon and a space ":", and may extend across multiple lines, with continuation lines indicated by preceding whitespace:
 
 ```
 header_name: header_value
@@ -58,28 +44,15 @@ long_header_name: value
   continues here
 ```
 
-Restrictions exists with regard to the names of headers and their value length,
-but also with regard to the structure of the headers part.
-Some headers are required,
-some are optional,
-some may appear only once or multiple times,
-while others are custom and only makes sense for some applications.
-
-The details beyond all these requirements and restrictions are out of the scope of this book,
-we only need to have very basic knowledge of the IMF,
-so I'll cover the relevant details when we need them.
+Headers adhere to certain restrictions regarding their names, value lengths, and structure. While some headers are mandatory or optional and may appear once or multiple times, others are custom and relevant only for specific applications. The book will cover pertinent details as needed, without delving into extensive technicalities.
 
 
 ### The body part
-The body part contains... the body of the message.
-This is what the initial sender wanted the recipient to read, metadata set aside.
+The body section contains the actual message content, excluding metadata. This encompasses what the original sender intends for the recipient to read.
 
-Restrictions also exist with regard to the length of lines and such,
-again this is irrelevant to this book,
-read the RFC if you're interested in these details.
+Similar to headers, there are constraints regarding line lengths, but such details are beyond the scope of this book and can be explored in the RFC for those interested.
 
-In its most simple form,
-the IMF will contain a header part with a few headers and a body part with a human-readable message:
+In a straightforward IMF, the headers part typically includes a few headers, while the body part contains a human-readable message:
 
 ```
 Date: Wed, 16 Dec 2020 10:41:51 +0200
@@ -115,40 +88,17 @@ Content-Type: text/html; charset=utf-8
   </body>
 </html>
 ```
-  
 
+The example demonstrates a basic ASCII message displayed as intended by the sender. However, headers can also convey instructions for displaying the message in various formats or encodings, such as HTML and UTF-8.
 
-Note that the headers provide ``From'' and ``To'' headers.
-It is important to understand that they do not come from the ``MAIL FROM'' and ``RCPT TO'' SMTP phases.
-They are metadata written by the original sender to display in the MUA,
-but serves no purpose in terms of transfer.
+The distinction between the "SMTP envelope" and the "DATA envelope" is essential. While the former includes only email addresses, the latter may incorporate additional user-friendly details like first and last names. Although they may align, discrepancies between the SMTP sender and the DATA "From" header are common.
 
-We have to distinguish the ``SMTP envelope'' from the ``DATA envelope''.
-The former is what happens at the protocol level before the DATA is even received,
-the latter is what will be displayed in the MUA no matter how the message was transfered.
-The ``SMTP envelope'' contains only the e-mail addresses,
-while the ``DATA envelope'' may contain the first and last name to read more user-friendly.
-Both may be aligned,
-in the sense that they have the same addresses between the SMTP and DATA envelopes,
-but this is not a requirement and you will often receive mail where the SMTP sender differs from the DATA ``From'' header.
 
 
 ### Multi-part messages
-Nowadays messages contain more than just a simple ASCII message.
-Some messages contain attachements while others provide both an HTML and a plain text version of the same body,
-leaving to the MUA the decision to display the most appropriate version.
+Modern messages often extend beyond simple ASCII text. Some include attachments or offer both HTML and plain text versions of the same content, allowing MUAs to determine the most suitable presentation.
 
-We have only looked at a very simple IMF structure,
-but thanks to the magic of Multipurpose Internet Mail Extensions,
-also known as MIME,
-it is possible to structure a message so that it embeds multiple messages or components in a single message.
-With appropriate hints,
-the MUA is then capable of splitting the body into multiple distinct parts and decide what to do with them.
-For mail-exchangers,
-only the top level structure is relevant and the notion of nested structures is of absolutely no concern.
-
-We don't need to dive into this but I will still provide a simple example just so you grasp how they work,
-then you can forget about multi-part for the remaining of this book:
+Though this book primarily focuses on basic IMF structures, the concept of Multipurpose Internet Mail Extensions (MIME) enables the integration of multiple message components into a single message. While mail exchangers only concern themselves with the top-level structure, the nested structures facilitated by MIME offer enhanced message structuring capabilities. However, readers need not worry too much about understanding this, as the book will provide a straightforward example before moving forward:
 
 ```
 Date: Wed, 16 Dec 2020 10:41:51 +0200
@@ -181,20 +131,8 @@ Content-Type: text/html; charset=utf-8
 --==_mimepart_5b784aee4aca8_643f3fbdb76d45c04373fd--
 ```
 
-Basically,
-the top structure declares that the content type of the body is a multipart message and provides a boundary delimiter between these parts.
-The body then contains multiple sections separated by the delimiter,
-each one being a new IMF structure with their own headers and body,
-the headers declaring the content type of the body.
+Essentially, the top structure of the email defines it as a multipart message, indicating that it contains multiple sections with different content types. These sections are separated by boundary delimiters. Each section acts as a distinct email message, complete with its own headers and body content, specifying the type of content it contains.
 
-In this example,
-the IMF contains an HTML and a plain text version of the same message,
-and the content type of the top structure hints the MUA about which one to pick first.
-When you're in a deep rage because of a mail displaying as HTML in your console client,
-now you know that either it wasn't multipart and didn't provide a plain text version,
-or the Content-Type header was not providing the proper hint for your MUA to do its work correctly.
+In our example, the email includes both HTML and plain text versions of the same message. The top-level structure's content type provides a clue to the email client about which version to display first. So, if you ever find yourself frustrated by an email displaying in HTML when you prefer plain text, it's likely because either the email wasn't multipart and lacked a plain text version, or the Content-Type header didn't provide the necessary guidance to your email client.
 
-A multipart message may contain many parts with different goals.
-Here the two parts were intended to provide different alternative for an end-user to read the message,
-but other parts may serve other purposes like adding attachements to a message or even encoding images that can be referenced in the HTML version of a message.
-How parts are consumed is a matter of what headers are present in the parts and the capabilities of the MUA.
+Multipart messages can serve various purposes. While our example aimed to provide alternative formats for the message, other parts could include attachments or encode images referenced in the HTML version. How these parts are handled depends on the headers present and the capabilities of your email client.
