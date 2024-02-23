@@ -7,26 +7,22 @@
 
 
 ## The DNS protocol
-DNS, the Domain Name Service, is an essential component of modern networks.
-Without it,
-we would be required to remember things like 88.190.237.114,
-2a01:e0b:1000:23:be30:5bff:fed7:9af or even 127.0.0.1
+DNS, or the Domain Name Service, is an indispensable element of modern networks. Imagine a world where you had to recall IP addresses like 88.190.237.114 or 2a01:e0b:1000:23:be30:5bff:fed7:9af instead of domain names. DNS simplifies our digital lives by translating human-readable domain names into machine-readable IP addresses.
 
-DNS is not a very complex service but it provides considerably more than simply resolving names to addresses.
-You can manage to survive with basic knowledge of how it works but the SMTP network relies greatly on the DNS protocol for many purposes and you won't be comfortable with SMTP until you are relatively comfortable with DNS.
+However, DNS isn't just about name resolution. It plays a crucial role in the functioning of SMTP networks. Understanding DNS is essential for grasping SMTP mechanics.
 
-As a matter of fact,
-most SMTP failures result from problems taking place at the DNS level and a broken DNS setup will invariably result in broken SMTP exchanges.
+In fact, many SMTP failures stem from issues at the DNS level. A faulty DNS setup inevitably leads to disrupted SMTP exchanges.
 
-Let's have a look at how DNS works and how SMTP interacts with it without worrying (yet) about more advanced topics like DKIM, SPF, DMARC or DANE which make use of the DNS system to "enhance" the SMTP protocol.
-I will also pretend that IPv6 doesn't exist for now,
-mainly because it will allow me to keep the examples simple.
+Let's delve into how DNS operates and its interaction with SMTP, focusing solely on the basics for now. We'll save advanced topics like DKIM, SPF, DMARC, and DANE for later discussions. Additionally, for simplicity's sake, we'll ignore IPv6 for the time being.
 
 
 ### DNS zones
-DNS servers store the informations regarding the domains they handle in _zones_.
-The _ns-master.poolp.org_ nameserver is in charge of the domain _opensmtpd.org_ and has a zone file describing the details regarding this domain.
-The zone for _opensmtpd.org_ contains the following (irrelevant parts truncated):
+DNS servers organize domain information into zones. Each DNS server manages one or more zones, containing records pertinent to the associated domains. For example, the zone file for "opensmtpd.org" may include details like:
+
+DNS servers organize domain information into zones.
+Each DNS server manages one or more zones, containing records pertinent to the associated domains.
+For example,
+the _ns-master.poolp.org_ nameserver is in charge of the domain _opensmtpd.org_ and has a zone file which includes details like:
 
 ```
                 NS      ns-master.poolp.org.
@@ -37,24 +33,13 @@ opensmtpd.org.  MX 0    mx-in.poolp.org.
 opensmtpd.org.  MX 50   mx-backup.poolp.org.
 ```
 
-The _opensmtpd.org_ zone declares two nameservers,
-_ns-master.poolp.org_ and _ns-backup.poolp.org_.
-It then declares that _opensmtpd.org_ and _www.opensmtpd.org_ are resolved as the IP address _82.65.169.200_,
-and more interestingly to us postmasters,
-it also declares that _opensmtpd.org_ has two mail exchanger records:
-_mx-in.poolp.org_ with a preference of 0 and _mx-backup.poolp.org_ with a preference of 50.
-This is done through the use of MX records.
+The opensmtpd.org zone is configured with two nameservers: ns-master.poolp.org and ns-backup.poolp.org. Additionally, it specifies that both opensmtpd.org and www.opensmtpd.org resolve to the IP address 82.65.169.200. Of particular interest to us postmasters, it includes two mail exchanger records for opensmtpd.org: mx-in.poolp.org with a preference of 0 and mx-backup.poolp.org with a preference of 50. These mail exchanger records are managed using MX records.
 
-Note that records may have relative labels,
-as is the case with _www_ which is relative to the zone domain _opensmtpd.org_,
-or absolute as is the case with any label ending with a dot.
+It's worth noting that records can have either relative labels, such as www relative to the zone domain opensmtpd.org, or absolute labels, indicated by a trailing dot.
 
 
 ### MX records
-The MX records are a particular kind of record which lists the Mail eXchangers that handle mail for a particular domain or subdomain.
-To be able to handle mail correctly,
-a domain must list at least one MX record but may list several for a specific domain or subdomains.
-The example above shows how different mail exchangers can be configured to take care of specific subdomains or domains:
+MX records play a crucial role in designating mail exchangers responsible for handling emails for a specific domain or subdomain. While a domain must have at least one MX record (to receive emails), it can list multiple for redundancy. For example:
 
 ```
 opensmtpd.org.          MX 0    mx-in.poolp.org.
@@ -63,9 +48,11 @@ subnet1.opensmtpd.org.  MX 0    mx1.example.org.
 subnet2.opensmtpd.org.  MX 0    mx1.example.com.
 ```
 
-The mail exchangers _mx-in.poolp.org_ and _mx-backup.poolp.org_ both handle the domain _opensmtpd.org_,
-while _mx1.example.org_ handles _subnet1.opensmtpd.org_ and _mx1.example.com_ handles _subnet2.opensmtpd.org_.
-Dead simple.
+Here, "opensmtpd.org" has two mail exchangers, while subdomains like "subnet1.opensmtpd.org" and "subnet2.opensmtpd.org" have their own designated mail exchangers.
+
+
+### Resolver
+XXX
 
 
 ### MX lookup
@@ -75,20 +62,11 @@ but the most important use upon which the entire SMTP protocol is built is _MX l
 If you read this far,
 you probably understood that this boils down to finding which MX are responsible for the destination domain of a message.
 
-Let's pretend that Eric Faurot and I are exchanging mails.
-I (gilles@poolp.org) want to send an email to Eric Faurot (eric@faurot.net) so I enter his e-mail address in my MUA (mutt) and send it.
+Imagine I'm exchanging emails with Eric Faurot. I, with the email address gilles@poolp.org, want to send an email to Eric Faurot at eric@faurot.net. I input his email address into my Mail User Agent (MUA), such as mutt, and send the message.
 
-Behind the scene,
-my MUA _somehow_ submits the message to a configured SMTP server.
-The SMTP server accepts to take responsability for the mail,
-queues it for relaying and returns a transaction identifier to my MUA with an OK status for the message.
-My MUA doesn't care much about this and doesn't tell me anything since this is a normal situation and in a sane Unix world you only become chatty when things go wrong.
+Behind the scenes, my MUA somehow forwards the message to a configured SMTP server. The SMTP server agrees to handle the email, queues it for relaying, and provides my MUA with a transaction identifier indicating the message's status as OK. Since this is a standard scenario, my MUA doesn't provide any additional feedback, following the Unix philosophy of staying quiet unless there's an issue.
 
-Then,
-the magic happens on the server side:
-my SMTP server performs an _MX lookup_.
-It requests its configured nameserver to perform the lookup of MX records for domain _faurot.net_.
-The nameserver will check if it has the information in cache and otherwise will locate which nameservers are in charge of _faurot.net_.
+Now, the magic unfolds on the server's side: my SMTP server conducts an MX lookup. It instructs its configured nameserver to retrieve the MX records for the domain faurot.net. The nameserver either retrieves this information from its cache or locates the authoritative nameservers for faurot.net:
 
 ```
 $ dig +nocomments -t NS faurot.net |grep NS 
@@ -100,7 +78,7 @@ faurot.net.             10757   IN      NS      b.dns.gandi.net.
 $
 ```
 
-It can then request either one to return the MX entries for the domain _faurot.net_:
+Then requests either on of them to return the MX entries for the domain faurot.net:
 
 ```
 $ dig +nocomments -t MX faurot.net |grep MX 
@@ -111,19 +89,26 @@ faurot.net.             10496   IN      MX      10 spool.mail.gandi.net.
 $ 
 ```
 
-At this point,
-it provides my SMTP server with the MX records it found:
-_fb.mail.gandi.net_ with a preference of 50 and _spool.mail.gandi.net_ with a preference of 10.
-My SMTP server reorders the mail exchangers so that the ones with the lowest preference numbers have the highest priority.
-In this case,
-it puts _spool.mail.gandi.net_ in first position and _fb.mail.gandi.net_ in second position.
+Upon obtaining this information, my resolver returns the MX records for faurot.net to my SMTP server. For instance, it may provide fb.mail.gandi.net with a preference of 50 and spool.mail.gandi.net with a preference of 10. My SMTP server prioritizes these mail exchangers based on their preference numbers, placing those with lower values at the top:
 
-My SMTP server then performs a DNS _A lookup_ on the first mail exchanger to resolve the name to an address,
-attempts to connect to it and submit the message there.
+```
+faurot.net.             10496   IN      MX      10 spool.mail.gandi.net.
+faurot.net.             10496   IN      MX      50 fb.mail.gandi.net.
+```
 
-Usually,
-that will be the end of it as far as my MX is concerned,
-it had committed to deliver the message to its destination and that's what it did.
+Next, my SMTP server conducts a DNS A lookup on the first mail exchanger to translate the hostname to an IP address:
+
+```
+$ dig +nocomments -t A spool.mail.gandi.net | grep A 
+; <<>> dig 9.10.8-P1 <<>> +nocomments -t A spool.mail.gandi.net
+;spool.mail.gandi.net.          IN      A
+spool.mail.gandi.net.   487     IN      A       217.70.178.1
+$  
+```
+
+It then attempts to establish a connection to that IP to start an SMTP session and deliver the message in an SMTP transaction.
+
+Typically, this marks the conclusion of my SMTP server's involvement. It's fulfilled its responsibility by delivering the message to its intended destination.
 
 
 ### Backup MX
