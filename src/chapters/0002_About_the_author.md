@@ -1,27 +1,12 @@
 # About the author
 
-I'm a senior software engineer,
-IT architect,
-certified hypnotherapist
-and night classes student in work psychology.
 
-After discovering Linux and BSD systems in the late 90s,
-I started studying computer science at EPITECH Paris in 2001 and graduated in 2006.
+I am a senior software engineer and IT architect. My journey into technology began in the late 90s when I discovered Linux and BSD systems. I pursued computer science at EPITECH Paris, graduating in 2006.
 
-I then held R&D software engineering positions at different companies working in security,
-search engines,
-distributed storage,
-database,
-mass-mailing and payment industries.
+Following graduation, I held R&D software engineering positions in various industries, including security, search engines, distributed storage, databases, mass-mailing, and payments.
 
-During that time,
-I taught cryptography for developers,
-Unix system programming and system administration classes as a guest teacher at Epitech,
-and wrote various private publications on the topics of programming and security for the private and public sector.
+During this time, I taught cryptography, Unix system programming, and system administration classes at Epitech. I also authored several publications on programming and security for both private and public sectors.
 
-Developer for the OpenBSD project from 2008 to 2020,
-I started and maintained the OpenSMTPD project as one of its main developers during that period of time.
-I still contribute to OpenSMTPD and assist OpenBSD developers with reviewing diffs but have shifted my focus to other projects.
+From 2008 onwards, I contributed to the OpenBSD project, particularly as the founder and maintainer of the OpenSMTPD project. While I continue to support OpenSMTPD and assist OpenBSD developers, I also engage in other projects.
 
-Today,
-my work activity is split between my part-time job as an IT architect and my hypnotherapy office.
+Today, I balance my time between my role as a part-time IT architect and contributing to software development projects.
