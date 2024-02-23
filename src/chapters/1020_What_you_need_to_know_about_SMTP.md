@@ -133,32 +133,8 @@ The server's positive response, indicated by the '250 2.0.0' code, signifies tha
 
 
 ### The SMTP network
-The SMTP protocol operates on a network consisting of nodes commonly known as Mail eXchangers,
-or MX for short,
-that all speak SMTP.
-The goal of these nodes is to bring a message one-step closer towards destination,
-usually by looking up in the DNS what is the next MX in charge of destination.
-In the network,
-nodes operate either as a relay which will accept a message and send it to another node,
-or as a destination which will accept a message and deliver it to the recipient.
-From a node perspective,
-the next node is always the destination,
-otherwise it would be better to skip it and talk to the destination directly.
-Nodes require an envelope consisting of a sender and a recipient,
-and possibly some other details,
-to determine if they should operate as a relay or a destination.
-In some cases,
-a node may be a relay for some domains and a destination for others.
+The SMTP protocol operates within a network comprised of nodes commonly referred to as Mail eXchangers, or MX for short, all of which communicate using SMTP. These nodes serve the purpose of advancing a message one step closer to its destination, typically achieved by querying DNS to determine the next MX responsible for the destination. Within the network, nodes function as either relays, which accept and forward messages to other nodes, or destinations, which accept and deliver messages to recipients. From a node's perspective, the next node is always the destination; otherwise, it would be more efficient to communicate directly with the destination. Nodes rely on an envelope containing sender and recipient details, among other information, to determine whether to function as a relay or destination. In some instances, a node may act as a relay for certain domains and a destination for others.
 
-The concept of relay and destination will be met again frequently in this book.
-For now,
-what matters is to understand that from a user point of view the SMTP protocol is only about sending mail,
-not retrieving it in any way.
-The retrieving has to be handled by direct access to the mailbox,
-or by the use of a different protocol such as POP or IMAP.
+The concepts of relay and destination are pivotal and will recur throughout this book. At this juncture, it's crucial to grasp that, from a user standpoint, the SMTP protocol solely pertains to sending mail, not retrieving it. Retrieval is managed either through direct access to the mailbox or via alternative protocols such as POP or IMAP.
 
-The role of the SMTP server is particularly critical.
-If the server is down,
-the domains that it handles no longer receive mail.
-Users assume their mail systems to be reliable and they usually do not tolerate loss.
-Since downtimes are unavoidable, the SMTP protocol provides mechanisms and imposes various constraints to mitigate their impact.
+The role of the SMTP server holds particular significance. A server outage results in the affected domains no longer receiving mail. Users expect their mail systems to be dependable and typically have low tolerance for disruptions. To address this, the SMTP protocol incorporates mechanisms and imposes various constraints to mitigate the impact of downtimes.
