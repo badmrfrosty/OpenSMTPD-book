@@ -11,7 +11,7 @@ A _lookup_ process isolates them,
 requesting the table API on behalf of pretty much every part of the daemon,
 and forwarding back the answers.
 The concept is so central to the software that it really needs to be addressed before we dive into actual configuration:
-__all configurations__ rely on tables wether they are used explicitely or not.
+__all configurations__ rely on tables whether they are used explicitly or not.
 
 A table is a _named_ resource that is capable of answering requests.
 How it does so is completely opaque to OpenSMTPD:
@@ -60,7 +60,7 @@ root: gilles
 
 There are also implicit tables,
 which a postmaster will not necessarily know about,
-and that are created internally by OpenSMTPD to make some of its own lookups more convenients.
+and that are created internally by OpenSMTPD to make some of its own lookups more convenient.
 Unlike explicit tables,
 they are not visible in the configuration and can't be referenced in rules.
 They also use a different naming convention,
@@ -68,7 +68,7 @@ one that uses characters forbidden in explicit table names to ensure there is no
 Examples of such table include the "getpwnam" table which is used to lookup local users,
 or the "localaddrs" table which is filled at startup with all the IP addresses of the local machine to ease lookup of local interfaces.
 
-Implicit tables will not be mentionned much more in this book as they are merely a commodity to OpenSMTPD developers,
+Implicit tables will not be mentioned much more in this book as they are merely a commodity to OpenSMTPD developers,
 however knowing that they exist can help understand how some features are implemented.
 
 In practice,
@@ -225,7 +225,7 @@ simply by having different table contents.
 
 
 ## Dynamic table backends
-As mentionned earlier,
+As mentioned earlier,
 dynamic tables are opaque from OpenSMTPD's perspective.
 It doesn't really care how they do the lookups as long as they can return a properly crafted answer for a kind of lookup.
 Dynamic tables have backends,

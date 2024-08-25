@@ -7,7 +7,7 @@
 ## Preliminaries
 Unlike other software that can put you in a world of stress,
 OpenSMTPD tries to bring a little bit of peace and harmony in your life as a postmaster.
-It is straighforward and this whole adventure will be as pleasing as a journey at the park.
+It is straightforward and this whole adventure will be as pleasing as a journey at the park.
 
 Oh,
 and as far as preliminaries are concerned,
@@ -48,7 +48,7 @@ If that's the case and it is the latest stable version, then...
 you're all set and you can skip to the next chapter, chop chop.
 
 Otherwise, you can check if your system has a pre-built package available for you to use.
-This is the case on many systems were installing the latest stable OpenSMTPD is just a command away.
+This is the case on many systems where installing the latest stable OpenSMTPD is just a command away.
 If that's the case for you, then again you're all set and you can skip to the next chapter.
 
 Unfortunately,
@@ -165,7 +165,7 @@ which was the one true way of enqueuing mail locally.
 
 As new MTA solutions became available,
 it was easier for them to adopt a sendmail-compatible interface rather than to expect MUA developers to make changes and support multiple MTA interfaces.
-The sendmail interface became a de-factor standart and MUA would simply call the `sendmail` executable without worrying about what MTA was hiding behind it.
+The sendmail interface became a de-factor standard and MUA would simply call the `sendmail` executable without worrying about what MTA was hiding behind it.
 
 The fact that the `sendmail` executable had now become a de-facto interface and no longer a Sendmail specific executable led to ambiguities and issues when multiple MTA were installed on the same machine.
 This is where the mailwrapper came into play.

@@ -152,7 +152,7 @@ match from src 192.168.1.1 for any action "action1"
 match from any for any action "action2"
 
 # clients always match the first rule,
-# the second rule is never evaluatred
+# the second rule is never evaluated
 #
 match from any for any action "action1"
 match from src 192.168.1.1 for any action "action2"

@@ -98,13 +98,13 @@ the bigger the hit on performances for each and every transaction.
 If you keep in mind that all of this is to ensure that your mail exchanger,
 with an uptime of hundreds of days,
 doesn't lose a mail in the unlikely case that it would crash right at the wrong time,
-then you can really grasp what it means to take responsability of a message.
+then you can really grasp what it means to take responsibility of a message.
 
 The queue within OpenSMTPD holds all mails pending delivery,
 it provides an interface to read and write to the persistent storage and nothing more than that.
 A scheduler is in charge of determining for which mails within the queue a delivery should be attempted at a given time.
-Mails exit the queue when postmaster explicitely requests deletion,
-when the mail has been sucessfully delivered, permanently rejected or simply when it expires.
+Mails exit the queue when postmaster explicitly requests deletion,
+when the mail has been successfully delivered, permanently rejected or simply when it expires.
 
 OpenSMTPD provides a very reliable queue which has persistence guarantees as a top priority while providing the best performances under that constraint.
 The details of how this is done are only relevant to curious developers and will be explained in a later chapter.
@@ -133,7 +133,7 @@ it notifies the queue so the envelope is removed and updates its internal state 
 
 
 ## Mail Delivery and Mail Transfer Agents
-A mail that is sitting in the queue was either accepted for local delivery or for relying,
+A mail that is sitting in the queue was either accepted for local delivery or for relaying,
 so when the scheduler makes it schedulable the mail must be passed to the proper subsystem.
 
 Local deliveries happen through mail delivery agents.

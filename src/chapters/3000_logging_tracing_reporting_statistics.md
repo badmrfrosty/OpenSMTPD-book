@@ -23,7 +23,7 @@ one that can be particularly stressful if it happens while people are losing the
 There is nothing more irritating than having to battle with software to extract informations during an incident so OpenSMTPD comes with multiple means of understanding what is happening at different levels.
 Brief and verbose logging as well as
 runtime tracing, profiling, states and statistics can provide enough details to shed some light on even the most chaotic situations.
-Particular care was taken to make all information available in formats that can easily be pared and processed by standard utilities,
+Particular care was taken to make all information available in formats that can easily be parsed and processed by standard utilities,
 allowing the creation of dashboards for monitoring and the use of command-line utilities for troubleshooting:
 pretty much any information is available two `grep(1)` away.
 
@@ -51,7 +51,7 @@ extended every now and then to add new information to some of the log lines.
 
 With OpenSMTPD 6.4,
 some of the lines grew with so much information that they became overwhelming.
-It became hard to keep trying to accomodate both humans and scripts:
+It became hard to keep trying to accommodate both humans and scripts:
 too much information is unreadable to humans but not enough information is a waste for scripts.
 A different approach was taken:
 logs are for humans and humans only, tools need to use a different mechanism targeted at them.
@@ -105,7 +105,7 @@ Then the log line is appended and follows a simple pattern:
 
 Each log line is prefixed with a unique session identifier shared by all related log lines,
 followed by the subsystem that generated the session,
-then the event being logged and finally a serie of event-related informations displayed in key and value pairs.
+then the event being logged and finally a series of event-related informations displayed in key and value pairs.
 Lines carry only the information related to the event they are logging which means that most information is never duplicated in multiple lines.
 
 So, how do we work with that.
@@ -181,11 +181,11 @@ Jul  6 07:30:31 ams-1 smtpd[75295]: 5df8806c16c7267c smtp disconnected reason=qu
 While the big picture lets you understand that a connection was accepted and that the client sent a "QUIT" command before submitting a message,
 it doesn't let you understand what happened in detail:
 did the client even see the banner ?
-did the client identifiy itself with HELO/EHLO ?
+did the client identify itself with HELO/EHLO ?
 did the client QUIT after looking at EHLO extensions offered on the server ?
 
 To deal with these cases,
-OpenSMTPD provides a tracing mechanism which can be temporarily enabled for a subystem so it can log very detailed informations.
+OpenSMTPD provides a tracing mechanism which can be temporarily enabled for a subsystem so it can log very detailed informations.
 For the log lines above, enabling the SMTP tracing could have highlighted that the client sent a QUIT right after the banner:
 
 ```  
@@ -223,9 +223,9 @@ tracing can be used to analyze the behavior of a session but most of the time it
 There are multiple tracing subsystems in OpenSMTPD that can help understand about anything that is happening inside the software,
 from sessions to the scheduling of envelopes and their writing to a disk.
 
-Some of the tracing susbsystems are really low-level and meant to be read by developers,
+Some of the tracing subsystems are really low-level and meant to be read by developers,
 like the _imsg_, _mproc_ or _io_ traces which respectively trace all of the inter-process communication,
-the packets used in inter-process communication and pretty much all of data input/output occuring in the daemon.
+the packets used in inter-process communication and pretty much all of data input/output occurring in the daemon.
 Others, like _smtp_, _mta_, _expand_, _lookup_ or _rules_ are used by both developers and users,
 tracing respectively the content of incoming and outgoing sessions, the expansion of aliases, the lookup of values in tables or the ruleset matching.
 
@@ -260,7 +260,7 @@ the tracing output format is much less user-friendly than brief logging.
 It is not meant to be used regularly but rather to cope with abnormal situations and gather all of the information useful for a developer to understand what is happening.
 Tracing is exposed to users because it can also help them understand issues,
 but it is primarily a tool aimed at developers that's not meant to have a stable or pretty output.
-Therefore the tracing subsystems are listed in `smtpctl(8)` but not much more documented as they can vary from a release ot another based on implementation details.
+Therefore the tracing subsystems are listed in `smtpctl(8)` but not much more documented as they can vary from a release to another based on implementation details.
 
 An interesting feature about tracing is that it doesn't require OpenSMTPD to be built with particular options,
 it is a very light feature that can be enabled in production with no significant overhead.
